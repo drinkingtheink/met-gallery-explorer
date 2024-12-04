@@ -6,6 +6,11 @@ const MetMuseumExplorer = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [allObjectIds, setAllObjectIds] = useState([]);
+
+  const ARTWORKS_PER_PAGE = 12;
 
   // Fetch departments on initial load
   useEffect(() => {
@@ -36,24 +41,33 @@ const MetMuseumExplorer = () => {
     fetchDepartments();
   }, []);
 
-  // Fetch artworks when department is selected
-  const fetchArtworks = async (department) => {
+  // Fetch artworks when department is selected or page changes
+  const fetchArtworks = async (department, currentPage) => {
     setIsLoading(true);
     try {
-      // Note: This is a simulated fetch as the Met Museum API doesn't directly support department filtering
-      const response = await fetch(
-        `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${encodeURIComponent(department)}&hasImages=true`
-      );
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch artworks');
+      // First, search for all object IDs in the department
+      if (!allObjectIds.length) {
+        const searchResponse = await fetch(
+          `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${encodeURIComponent(department)}&hasImages=true`
+        );
+        
+        if (!searchResponse.ok) {
+          throw new Error('Failed to fetch artwork IDs');
+        }
+        
+        const searchData = await searchResponse.json();
+        setAllObjectIds(searchData.objectIDs || []);
+        setTotalPages(Math.ceil((searchData.objectIDs || []).length / ARTWORKS_PER_PAGE));
       }
-      
-      const data = await response.json();
-      
-      // Limit to first 12 artworks
+
+      // Calculate the slice of object IDs for current page
+      const startIndex = (currentPage - 1) * ARTWORKS_PER_PAGE;
+      const endIndex = startIndex + ARTWORKS_PER_PAGE;
+      const pageObjectIds = allObjectIds.slice(startIndex, endIndex);
+
+      // Fetch details for each artwork on current page
       const artworkDetails = await Promise.all(
-        data.objectIDs.slice(0, 12).map(async (id) => {
+        pageObjectIds.map(async (id) => {
           const artworkResponse = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`);
           return artworkResponse.json();
         })
@@ -70,7 +84,25 @@ const MetMuseumExplorer = () => {
   const handleDepartmentChange = (e) => {
     const department = e.target.value;
     setSelectedDepartment(department);
-    fetchArtworks(department);
+    setPage(1);
+    setAllObjectIds([]); // Reset object IDs
+    fetchArtworks(department, 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      const nextPage = page + 1;
+      setPage(nextPage);
+      fetchArtworks(selectedDepartment, nextPage);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) {
+      const prevPage = page - 1;
+      setPage(prevPage);
+      fetchArtworks(selectedDepartment, prevPage);
+    }
   };
 
   if (error) {
@@ -114,6 +146,49 @@ const MetMuseumExplorer = () => {
           ))}
         </select>
       </div>
+
+      {/* Pagination Controls */}
+      {selectedDepartment && (
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: '20px',
+          gap: '15px'
+        }}>
+          <button 
+            onClick={handlePrevPage}
+            disabled={page === 1}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: page === 1 ? '#cccccc' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: page === 1 ? 'not-allowed' : 'pointer'
+            }}
+          >
+            Previous
+          </button>
+          
+          <span>Page {page} of {totalPages}</span>
+          
+          <button 
+            onClick={handleNextPage}
+            disabled={page === totalPages}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: page === totalPages ? '#cccccc' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: page === totalPages ? 'not-allowed' : 'pointer'
+            }}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {/* Loading State */}
       {isLoading && (
