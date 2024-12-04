@@ -111,157 +111,202 @@ const MetMuseumExplorer = () => {
 
   return (
     <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '20px',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'Arial, sans-serif',
+      backgroundColor: '#F5F5F5',
+      minHeight: '100vh',
+      padding: '20px'
     }}>
-      <h1 style={{
-        textAlign: 'center',
-        marginBottom: '20px'
-      }}>
-        Met Museum Artwork Explorer
-      </h1>
-
-      {/* Department Selector */}
       <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        marginBottom: '30px'
+        maxWidth: '1400px',
+        margin: '0 auto',
+        backgroundColor: '#E0E0E0',
+        padding: '40px',
+        borderRadius: '15px',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.1)'
       }}>
-        <select 
-          value={selectedDepartment}
-          onChange={handleDepartmentChange}
-          style={{
-            padding: '10px',
-            fontSize: '16px',
-            width: '300px'
-          }}
-        >
-          <option value="">Select a Department</option>
-          {departments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
-          ))}
-        </select>
-      </div>
+        <h1 style={{
+          textAlign: 'center',
+          marginBottom: '30px',
+          color: '#333',
+          fontSize: '2.5rem'
+        }}>
+          Met Museum Artwork Gallery
+        </h1>
 
-      {/* Pagination Controls */}
-      {selectedDepartment && (
+        {/* Department Selector */}
         <div style={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: '20px',
-          gap: '15px'
+          marginBottom: '30px'
         }}>
-          <button 
-            onClick={handlePrevPage}
-            disabled={page === 1}
+          <select 
+            value={selectedDepartment}
+            onChange={handleDepartmentChange}
             style={{
-              padding: '10px 20px',
-              backgroundColor: page === 1 ? '#cccccc' : '#007bff',
-              color: 'white',
-              border: 'none',
+              padding: '10px',
+              fontSize: '16px',
+              width: '300px',
               borderRadius: '5px',
-              cursor: page === 1 ? 'not-allowed' : 'pointer'
+              border: '1px solid #ccc'
             }}
           >
-            Previous
-          </button>
-          
-          <span>Page {page} of {totalPages}</span>
-          
-          <button 
-            onClick={handleNextPage}
-            disabled={page === totalPages}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: page === totalPages ? '#cccccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: page === totalPages ? 'not-allowed' : 'pointer'
-            }}
-          >
-            Next
-          </button>
+            <option value="">Select a Department</option>
+            {departments.map((dept) => (
+              <option key={dept} value={dept}>
+                {dept}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
 
-      {/* Loading State */}
-      {isLoading && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '200px'
-        }}>
-          Loading artworks...
-        </div>
-      )}
-
-      {/* Artwork Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-        gap: '20px'
-      }}>
-        {artworks.map((artwork) => (
-          <div 
-            key={artwork.objectID}
-            style={{
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              overflow: 'hidden',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-              transition: 'transform 0.3s ease'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          >
-            <img
-              src={artwork.primaryImage || '/api/placeholder/300/400'}
-              alt={artwork.title}
+        {/* Pagination Controls */}
+        {selectedDepartment && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '20px',
+            gap: '15px'
+          }}>
+            <button 
+              onClick={handlePrevPage}
+              disabled={page === 1}
               style={{
-                width: '100%',
-                height: '250px',
-                objectFit: 'cover'
+                padding: '10px 20px',
+                backgroundColor: page === 1 ? '#cccccc' : '#4A4A4A',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: page === 1 ? 'not-allowed' : 'pointer'
               }}
-            />
-            <div style={{
-              padding: '15px'
-            }}>
-              <h3 style={{
-                fontWeight: 'bold',
-                fontSize: '16px',
-                marginBottom: '5px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
-              }}>
-                {artwork.title}
-              </h3>
-              <p style={{
-                color: '#666',
-                fontSize: '14px',
-                marginBottom: '5px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
-              }}>
-                {artwork.artistDisplayName || 'Artist Unknown'}
-              </p>
-              <p style={{
-                color: '#999',
-                fontSize: '12px'
-              }}>
-                {artwork.objectDate || 'Date Unknown'}
-              </p>
-            </div>
+            >
+              Previous
+            </button>
+            
+            <span style={{color: '#333'}}>Page {page} of {totalPages}</span>
+            
+            <button 
+              onClick={handleNextPage}
+              disabled={page === totalPages}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: page === totalPages ? '#cccccc' : '#4A4A4A',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: page === totalPages ? 'not-allowed' : 'pointer'
+              }}
+            >
+              Next
+            </button>
           </div>
-        ))}
+        )}
+
+        {/* Loading State */}
+        {isLoading && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '200px'
+          }}>
+            Loading artworks...
+          </div>
+        )}
+
+        {/* Artwork Gallery Wall */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+          gap: '40px',
+          padding: '40px',
+          backgroundColor: '#D3D3D3',
+          borderRadius: '15px',
+          boxShadow: 'inset 0 0 20px rgba(0,0,0,0.1)'
+        }}>
+          {artworks.map((artwork, index) => (
+            <div 
+              key={artwork.objectID}
+              style={{
+                backgroundColor: '#F0F0F0',
+                boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+                borderRadius: '10px',
+                overflow: 'hidden',
+                transform: `rotate(${(index % 2 ? 1 : -1) * (Math.random() * 3)}deg)`,
+                transition: 'transform 0.3s ease',
+                perspective: '1000px'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05) rotate(0deg)';
+                e.currentTarget.style.zIndex = '10';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = `rotate(${(index % 2 ? 1 : -1) * (Math.random() * 3)}deg)`;
+                e.currentTarget.style.zIndex = 'auto';
+              }}
+            >
+              {/* Frame */}
+              <div style={{
+                border: '15px solid #8B4513', // Dark wood frame color
+                borderImage: 'linear-gradient(to right, #8B4513, #D2691E)',
+                borderImageSlice: 1,
+                padding: '10px',
+                backgroundColor: '#F0F0F0',
+                boxShadow: 'inset 0 0 10px rgba(0,0,0,0.2)'
+              }}>
+                <div style={{
+                  border: '2px solid #000',
+                  padding: '5px'
+                }}>
+                  <img
+                    src={artwork.primaryImage || '/api/placeholder/300/400'}
+                    alt={artwork.title}
+                    style={{
+                      width: '100%',
+                      height: '300px',
+                      objectFit: 'cover',
+                      boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+                    }}
+                  />
+                </div>
+              </div>
+              
+              {/* Artwork Details */}
+              <div style={{
+                padding: '15px',
+                backgroundColor: '#F0F0F0',
+                textAlign: 'center'
+              }}>
+                <h3 style={{
+                  fontWeight: 'bold',
+                  fontSize: '16px',
+                  marginBottom: '5px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {artwork.title}
+                </h3>
+                <p style={{
+                  color: '#666',
+                  fontSize: '14px',
+                  marginBottom: '5px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {artwork.artistDisplayName || 'Artist Unknown'}
+                </p>
+                <p style={{
+                  color: '#999',
+                  fontSize: '12px'
+                }}>
+                  {artwork.objectDate || 'Date Unknown'}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
