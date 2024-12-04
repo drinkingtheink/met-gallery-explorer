@@ -203,12 +203,12 @@ const MetMuseumExplorer = () => {
         )}
 
         {/* Loading State */}
-        {isLoading && (
+        {true && (
           <div style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '100px',
+            height: '60px',
             position: 'absolute',
             backgroundColor: 'rgba(0,0,0,0.5)',
             width: '400px',
