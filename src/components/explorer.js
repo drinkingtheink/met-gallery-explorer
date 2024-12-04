@@ -226,7 +226,7 @@ const MetMuseumExplorer = () => {
         }}>
           {artworks.map((artwork, index) => (
             <div 
-              key={artwork.objectID}
+              key={artwork.objectID + index}
               style={{
                 backgroundColor: '#F0F0F0',
                 boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
