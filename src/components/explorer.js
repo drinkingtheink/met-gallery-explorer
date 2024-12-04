@@ -208,7 +208,16 @@ const MetMuseumExplorer = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '200px'
+            height: '100px',
+            position: 'absolute',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            width: '400px',
+            right: '0',
+            left: '0',
+            margin: 'auto',
+            zIndex: '10000000',
+            color: 'white',
+            borderRadius: '0 0 10px 10px',
           }}>
             Loading artworks...
           </div>
