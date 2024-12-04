@@ -203,7 +203,7 @@ const MetMuseumExplorer = () => {
         )}
 
         {/* Loading State */}
-        {true && (
+        {isLoading && (
           <div style={{
             display: 'flex',
             justifyContent: 'center',
