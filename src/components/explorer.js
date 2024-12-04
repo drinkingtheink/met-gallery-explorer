@@ -303,10 +303,67 @@ const MetMuseumExplorer = () => {
                 }}>
                   {artwork.objectDate || 'Date Unknown'}
                 </p>
+                <p style={{
+                  color: '#666',
+                  fontSize: '14px',
+                  marginBottom: '5px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {artwork.medium || 'Medium Unknown'}
+                  {artwork.isPublicDomain && (
+                        <p>FREE FOR THE TAKING</p>
+                    )}
+                </p>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {selectedDepartment && (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '20px',
+            marginBottom: '20px',
+            gap: '15px'
+          }}>
+            <button 
+              onClick={handlePrevPage}
+              disabled={page === 1}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: page === 1 ? '#cccccc' : '#4A4A4A',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: page === 1 ? 'not-allowed' : 'pointer'
+              }}
+            >
+              Previous
+            </button>
+            
+            <span style={{color: '#333'}}>Page {page} of {totalPages}</span>
+            
+            <button 
+              onClick={handleNextPage}
+              disabled={page === totalPages}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: page === totalPages ? '#cccccc' : '#4A4A4A',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: page === totalPages ? 'not-allowed' : 'pointer'
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
