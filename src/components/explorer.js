@@ -246,7 +246,7 @@ const MetMuseumExplorer = () => {
                 perspective: '1000px'
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05) rotate(0deg)';
+                e.currentTarget.style.transform = 'scale(1.2) rotate(0deg)';
                 e.currentTarget.style.zIndex = '10';
               }}
               onMouseOut={(e) => {
